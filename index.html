@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puncak Gear Rental</title>
+    <link rel="icon" href="images/logo/logo.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .product-card {
+            position: relative;
+            overflow: visible !important; /* Penting agar badge yang keluar tidak terpotong */
+        }
+        .card-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 40px;
+            height: 40px;
+            background-color: #ff6b00; /* Warna oranye sesuai tema */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            z-index: 10;
+            border: 3px solid #fff; /* Memberikan efek menyatu/terpisah dari background */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">Puncak<span class="accent">Gear</span></a>
+            <a href="#contact" class="mobile-contact-link">Kontak</a>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#catalog">Katalog</a></li>
+                <li><a href="#booking">Booking</a></li>
+                <li><a href="#contact">Kontak</a></li>
+                <li class="nav-indicator"></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1>Jelajahi Alam Tanpa Batas</h1>
+            <p>Sewa peralatan gunung premium, aman, dan terawat untuk petualangan terbaik Anda.</p>
+            <a href="#catalog" class="btn btn-primary">Sewa Sekarang</a>
+        </div>
+    </header>
+
+    <!-- Catalog Section -->
+    <section id="catalog" class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Katalog Peralatan</h2>
+                <p>Pilih perlengkapan sesuai kebutuhan ekspedisi Anda.</p>
+            </div>
+
+            <!-- Search & Sort -->
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Cari nama alat (misal: Tenda)...">
+                <select id="sort-select">
+                    <option value="default" disabled selected hidden>Urutkan Berdasarkan</option>
+                    <option value="price-asc">Harga Terendah</option>
+                    <option value="price-desc">Harga Tertinggi</option>
+                </select>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-container">
+                <button class="filter-btn active" data-category="all">Semua</button>
+                <button class="filter-btn" data-category="pakaian">Pakaian</button>
+                <button class="filter-btn" data-category="sepatu">Sepatu</button>
+                <button class="filter-btn" data-category="tenda">Tenda</button>
+                <button class="filter-btn" data-category="tas">Tas Carrier</button>
+                <button class="filter-btn" data-category="masak">Alat Masak</button>
+            </div>
+
+            <!-- Product Grid (Rendered by JS) -->
+            <div id="product-grid" class="product-grid">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="section booking-section">
+        <div class="container">
+            <div class="booking-wrapper">
+                <div class="booking-info">
+                    <h2>Mulai Petualangan</h2>
+                    <p>Isi formulir di samping untuk melakukan reservasi awal. Tim kami akan mengonfirmasi ketersediaan barang melalui WhatsApp atau Email.</p>
+                    <ul class="booking-steps">
+                        <li>Pilih barang di katalog</li>
+                        <li>Isi data diri dan tanggal</li>
+                        <li>Tunggu konfirmasi admin</li>
+                        <li>Ambil barang di toko</li>
+                    </ul>
+                </div>
+                <form id="booking-form" class="booking-form">
+                    <div class="form-group">
+                        <label for="name">Nama Lengkap</label>
+                        <input type="text" id="name" required placeholder="Contoh: Budi Santoso">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Nomor WhatsApp</label>
+                        <input type="tel" id="phone" required placeholder="0812...">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-date">Tanggal Mulai</label>
+                            <input type="date" id="start-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-date">Tanggal Selesai</label>
+                            <input type="date" id="end-date" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Catatan Tambahan (Opsional)</label>
+                        <textarea id="notes" rows="3" placeholder="Daftar barang yang ingin disewa..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary full-width">Ajukan Sewa</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container footer-content">
+            <div class="footer-col">
+                <h3>Puncak<span class="accent">Gear</span></h3>
+                <p>Mitra terpercaya pendakian Anda sejak 2020.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Lokasi Toko</h4>
+                <p><a href="https://maps.app.goo.gl/Ex47CpKYJiiUi8EQ7" target="_blank" rel="noopener noreferrer">Kp. Kaduberuk Desa Sukarena Kec. Ciomas Kab. Serang Prov. Banten</a></p>
+                <p>Senin - Minggu: 09.00 - 21.00</p>
+            </div>
+            <div class="footer-col">
+                <h4>Kontak</h4>
+                <p>WA: <a href="https://wa.me/6281927149299?text=Halo%20Puncak%20Gear%2C%20saya%20ingin%20bertanya%20seputar%20penyewaan%20alat%20gunung." target="_blank">+62 819 2714 9299</a></p>
+                <p>IG: <a href="https://instagram.com/pupuncak_gear" target="_blank">@puncak_gear</a></p>
+            </div>
+            <div class="footer-col">
+                <h4><a href="#" id="full-terms-link">Syarat & Ketentuan</a></h4>
+                <ul class="footer-links">
+                    <li><a href="#" class="term-link" data-id="ktp">Wajib meninggalkan KTP/SIM</a></li>
+                    <li><a href="#" class="term-link" data-id="denda">Denda keterlambatan berlaku</a></li>
+                    <li><a href="#" class="term-link" data-id="rusak">Kerusakan menjadi tanggung jawab penyewa</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="copyright-year">2023</span> Puncak Gear Rental. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Floating Cart Button -->
+    <div id="cart-fab" class="cart-fab hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+        <span id="cart-counter" class="cart-counter">0</span>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Keranjang Sewa</h2>
+                <button id="close-modal-btn" class="close-modal-btn">&times;</button>
+            </div>
+            <div id="cart-items-container" class="modal-body">
+                <!-- Cart items will be injected here by JS -->
+                <p class="cart-empty-msg">Keranjang Anda masih kosong.</p>
+            </div>
+            <div class="modal-footer">
+                <p>Total: <span id="cart-total">Rp 0</span></p>
+                <button class="btn btn-primary" onclick="document.getElementById('booking').scrollIntoView({ behavior: 'smooth' }); toggleCartModal();">Lanjut ke Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="cart-modal">
+        <div class="modal-content product-modal-content">
+            <button id="close-product-modal" class="close-modal-btn absolute-close">&times;</button>
+            <div class="product-modal-body modal-body">
+                <div class="product-modal-image">
+                    <img id="modal-product-img" src="" alt="Product Image">
+                </div>
+                <div class="product-modal-info">
+                    <span id="modal-product-category" class="product-category-badge">Kategori</span>
+                    <h2 id="modal-product-name">Nama Produk</h2>
+                    <h3 id="modal-product-price" class="product-price-large">Rp 0</h3>
+                    
+                    <div class="modal-specs">
+                        <h4>Spesifikasi Detail:</h4>
+                        <ul id="modal-product-specs">
+                            <!-- Specs injected here -->
+                        </ul>
+                    </div>
+                    
+                    <div id="modal-product-actions" class="modal-actions">
+                        <!-- Action button injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Terms & Conditions Modal -->
+    <div id="terms-modal" class="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="term-title">Judul Ketentuan</h2>
+                <button id="close-terms-btn" class="close-modal-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="term-description" style="line-height: 1.8; color: var(--text-dark);">Deskripsi lengkap akan muncul di sini.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="style.js"></script>
+</body>
+</html>
