@@ -1,6 +1,6 @@
 // Konfigurasi Google Sheet
 // Ganti URL di bawah ini dengan Link CSV dari Google Sheet Anda (File > Publish to Web > CSV)
-const SHEET_URL = 'TEMPLATE_URL_PLACEHOLDER';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTqt3F8pzIuenmvVYXZjEPxMQjqdO9Eshsz6Is5gRtJ17W7MY0vZcJlTzCrC_-t3uSFp908xchdOQJg/pub?gid=0&single=true&output=csv';
 
 let products = []; // Data akan diisi dari Google Sheet
 
