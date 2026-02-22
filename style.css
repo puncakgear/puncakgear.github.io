@@ -292,13 +292,13 @@ ul { list-style: none; }
 
 @keyframes pulse-orange {
     0% {
-        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0.7);
+        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0.7); /* Start with Orange */
     }
-    70% {
-        box-shadow: var(--shadow), 0 0 0 10px rgba(230, 126, 34, 0);
+    75% {
+        box-shadow: var(--shadow), 0 0 0 10px rgba(239, 68, 68, 0); /* Expand & transform to transparent Red */
     }
     100% {
-        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0);
+        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0); /* Fade out */
     }
 }
 
@@ -703,6 +703,7 @@ footer { background-color: var(--dark-green); color: #d1d5db; padding: 4rem 0 2r
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    justify-content: center; /* Menengahkan konten secara vertikal */
 }
 
 @media (min-width: 768px) {
@@ -799,5 +800,5 @@ footer { background-color: var(--dark-green); color: #d1d5db; padding: 4rem 0 2r
 }
 
 .modal-actions {
-    margin-top: auto;
+    margin-top: 1.5rem; /* Ubah dari auto agar tidak memaksa ke bawah */
 }
