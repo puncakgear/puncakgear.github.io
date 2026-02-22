@@ -347,6 +347,12 @@ const filterProducts = () => {
         filtered.sort((a, b) => a.price - b.price);
     } else if (sortValue === 'price-desc') {
         filtered.sort((a, b) => b.price - a.price);
+    } else if (sortValue === 'discount') {
+        filtered.sort((a, b) => {
+            const discountA = a.normalPrice > a.price ? ((a.normalPrice - a.price) / a.normalPrice) : 0;
+            const discountB = b.normalPrice > b.price ? ((b.normalPrice - b.price) / b.normalPrice) : 0;
+            return discountB - discountA;
+        });
     }
     
     renderProducts(filtered);
