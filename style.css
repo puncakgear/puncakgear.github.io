@@ -650,6 +650,15 @@ footer { background-color: var(--dark-green); color: #d1d5db; padding: 4rem 0 2r
     .booking-wrapper { grid-template-columns: 1fr; }
     .nav-links { display: none; } /* Simplified for demo */
     .mobile-contact-link { display: block; }
+
+    /* Center background image on mobile */
+    .booking-section::before {
+        width: 80%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.1; /* Sedikit lebih transparan agar tidak mengganggu teks */
+    }
 }
 
 /* --- Product Detail Modal --- */
