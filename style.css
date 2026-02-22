@@ -588,7 +588,7 @@ ul { list-style: none; }
     transform: translateY(-50%);
     width: 50%;
     height: 90%;
-    background-image: url('/images/logo/background.webp');
+    background-image: url('images/logo/background.webp');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -653,10 +653,13 @@ footer { background-color: var(--dark-green); color: #d1d5db; padding: 4rem 0 2r
 
     /* Center background image on mobile */
     .booking-section::before {
-        width: 80%;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
+        width: 100%;
+        left: 0;
+        top: 0;
+        height: 100%;
+        transform: none;
+        background-position: center 150px;
+        background-size: 100%;
         opacity: 0.1; /* Sedikit lebih transparan agar tidak mengganggu teks */
     }
 }
