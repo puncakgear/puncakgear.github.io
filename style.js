@@ -70,14 +70,25 @@ const addToCart = (productId) => {
     const product = products.find(p => p.id === productId);
     if (!product) return;
 
+    // Cek stok sebelum menambahkan
+    if (product.stock <= 0) {
+        alert(`Maaf, ${product.name} sedang habis disewa.`);
+        return;
+    }
+
     const existingItem = cart.find(item => item.id === productId);
 
     if (existingItem) {
-        existingItem.quantity++;
+        // Cek stok sebelum menambah jumlah
+        if (existingItem.quantity < product.stock) {
+            existingItem.quantity++;
+        } else {
+            alert(`Stok untuk ${product.name} hanya tersisa ${product.stock} unit.`);
+            return;
+        }
     } else {
         cart.push({ ...product, quantity: 1 });
     }
-    
     updateCartState();
 };
 
@@ -85,7 +96,18 @@ const changeQuantity = (productId, amount) => {
     const cartItem = cart.find(item => item.id === productId);
     if (!cartItem) return;
 
-    cartItem.quantity += amount;
+    const product = products.find(p => p.id === productId);
+    if (!product) return;
+
+    const newQuantity = cartItem.quantity + amount;
+
+    // Cek stok saat menambah jumlah
+    if (amount > 0 && newQuantity > product.stock) {
+        alert(`Stok untuk ${product.name} hanya tersisa ${product.stock} unit.`);
+        return;
+    }
+
+    cartItem.quantity = newQuantity;
 
     if (cartItem.quantity <= 0) {
         // Remove item from cart if quantity is 0 or less
@@ -252,7 +274,7 @@ const renderProducts = (data) => {
 
     data.forEach((product, index) => {
         const statusClass = product.available ? 'status-available' : 'status-unavailable';
-        const statusText = product.available ? 'Tersedia' : 'Sedang Disewa';
+        const statusText = product.available ? `Tersedia (${product.stock})` : 'Habis Disewa';
 
         // Ubah label "Kapasitas" menjadi "Ukuran" jika kategori adalah sepatu atau baju
         let capacityLabel = 'Kapasitas';
@@ -572,7 +594,8 @@ function parseCSV(csvText) {
                 kapasitas: row.kapasitas,
                 berat: row.berat
             },
-            available: row.available && row.available.trim().toLowerCase() === 'true'
+            stock: row.stock ? parseInt(row.stock) : 0,
+            available: row.stock && parseInt(row.stock) > 0
         };
     });
 }
