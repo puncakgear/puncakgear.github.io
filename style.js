@@ -132,7 +132,7 @@ const updateCartModal = () => {
 
 const updateBookingNotes = () => {
     if (cart.length > 0) {
-        const bookingList = cart.map(item => `${item.name} (x${item.quantity})`).join(', ');
+        const bookingList = cart.map(item => `${item.name} [ID: ${item.id}] (x${item.quantity})`).join(', ');
         notesTextarea.value = `Saya ingin menyewa: ${bookingList}.`;
     } else {
         notesTextarea.value = '';
