@@ -1,6 +1,6 @@
 Lisensi MIT
 
-Hak Cipta (c) 2023 Puncak Gear
+Hak Cipta (c) 2026 Puncak Gear
 
 Dengan ini diberikan izin, tanpa biaya, kepada siapa pun yang mendapatkan salinan perangkat lunak ini dan file dokumentasi terkait ("Perangkat Lunak"), untuk memperlakukan Perangkat Lunak tanpa batasan, termasuk namun tidak terbatas pada hak untuk menggunakan, menyalin, memodifikasi, menggabungkan, menerbitkan, mendistribusikan, mensublisensikan, dan/atau menjual salinan Perangkat Lunak, dan untuk mengizinkan orang yang menerima Perangkat Lunak untuk melakukannya, dengan tunduk pada persyaratan berikut:
 
@@ -12,7 +12,7 @@ PERANGKAT LUNAK INI DISEDIAKAN "SEBAGAIMANA ADANYA", TANPA JAMINAN APA PUN, TERS
 
 MIT License
 
-Copyright (c) 2023 Puncak Gear
+Copyright (c) 2026 Puncak Gear
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

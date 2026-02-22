@@ -901,7 +901,13 @@ const checkHashForLicense = async () => {
             try {
                 const res = await fetch('LICENSE.md');
                 if (res.ok) {
-                    const text = await res.text();
+                    let text = await res.text();
+
+                    // Update tahun copyright secara otomatis agar sesuai tahun saat ini
+                    const currentYear = new Date().getFullYear();
+                    text = text.replace(/Hak Cipta \(c\) \d{4}/g, `Hak Cipta (c) ${currentYear}`);
+                    text = text.replace(/Copyright \(c\) \d{4}/g, `Copyright (c) ${currentYear}`);
+
                     // Parse Markdown ke HTML menggunakan marked
                     document.getElementById('license-content').innerHTML = marked.parse(text);
                 } else {
