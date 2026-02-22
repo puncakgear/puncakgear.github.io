@@ -421,10 +421,14 @@ Mohon konfirmasi ketersediaan dan total biayanya. Terima kasih!`;
 // Global Event Listeners
 // Initial Render
 document.addEventListener('DOMContentLoaded', () => {
+    checkHashForReadme(); // Panggil ini duluan agar popup tetap muncul meski ada error di bawahnya
     fetchProducts(); // Panggil fungsi fetch data saat website dimuat
     updateCartState();
-    document.getElementById('copyright-year').textContent = new Date().getFullYear();
-    checkHashForReadme();
+    
+    const copyrightEl = document.getElementById('copyright-year');
+    if (copyrightEl) {
+        copyrightEl.textContent = new Date().getFullYear();
+    }
 });
 
 // --- Google Sheet Fetch Logic ---
@@ -688,7 +692,7 @@ function handleCartAction(e) {
 
 // --- Readme Popup Logic ---
 const checkHashForReadme = async () => {
-    if (window.location.hash === '#readme') {
+    if (window.location.hash.toLowerCase() === '#readme') {
         let readmeModal = document.getElementById('readme-modal');
         
         if (!readmeModal) {
