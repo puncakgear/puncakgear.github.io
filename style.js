@@ -11,6 +11,8 @@ const bookingForm = document.getElementById('booking-form');
 const notesTextarea = document.getElementById('notes');
 const searchInput = document.getElementById('search-input');
 const sortSelect = document.getElementById('sort-select');
+const startDateInput = document.getElementById('start-date');
+const endDateInput = document.getElementById('end-date');
 
 // Cart DOM Elements
 const cartFab = document.getElementById('cart-fab');
@@ -37,6 +39,27 @@ const formatRupiah = (number) => {
         currency: 'IDR',
         minimumFractionDigits: 0
     }).format(number);
+};
+
+// --- Kalkulasi Durasi Sewa ---
+const getDurationInDays = () => {
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
+
+    if (!startDate || !endDate) {
+        return 1; // Default 1 hari jika tanggal belum lengkap
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) {
+        return 1; // Jika tanggal tidak valid, anggap 1 hari
+    }
+
+    const diffTime = end.getTime() - start.getTime();
+    const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays + 1; // Sewa inklusif, jadi 10-10 adalah 1 hari.
 };
 
 // --- Fitur Keranjang Belanja ---
@@ -95,25 +118,30 @@ const updateCartIcon = () => {
 };
 
 const updateCartModal = () => {
+    const totalLabel = cartTotalEl.previousElementSibling;
+
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="cart-empty-msg">Keranjang Anda masih kosong.</p>';
         cartTotalEl.textContent = formatRupiah(0);
+        if (totalLabel) {
+            totalLabel.textContent = 'Total';
+        }
         return;
     }
 
     cartItemsContainer.innerHTML = '';
-    let total = 0;
+    let subtotal = 0;
 
     cart.forEach(item => {
         const itemEl = document.createElement('div');
         itemEl.classList.add('cart-item');
-        total += item.price * item.quantity;
+        subtotal += item.price * item.quantity;
 
         itemEl.innerHTML = `
             <img src="${item.image}" alt="${item.name}" class="cart-item-img">
             <div class="cart-item-info">
                 <h4>${item.name}</h4>
-                <p class="cart-item-price">${formatRupiah(item.price)} x ${item.quantity} = ${formatRupiah(item.price * item.quantity)}</p>
+                <p class="cart-item-price">${formatRupiah(item.price)} x ${item.quantity}</p>
             </div>
             <div class="cart-item-actions">
                 <div class="quantity-controls">
@@ -127,7 +155,19 @@ const updateCartModal = () => {
         cartItemsContainer.appendChild(itemEl);
     });
 
+    const duration = getDurationInDays();
+    const total = subtotal * duration;
     cartTotalEl.textContent = formatRupiah(total);
+
+    if (totalLabel) {
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+        if (startDate && endDate && duration > 0 && new Date(endDate) >= new Date(startDate)) {
+            totalLabel.textContent = `Total untuk ${duration} hari`;
+        } else {
+            totalLabel.textContent = 'Total (pilih tanggal)';
+        }
+    }
 };
 
 const updateBookingNotes = () => {
@@ -391,12 +431,33 @@ bookingForm.addEventListener('submit', (e) => {
     
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
-    const startDate = document.getElementById('start-date').value;
-    const endDate = document.getElementById('end-date').value;
+    const startDate = startDateInput.value;
+    const endDate = endDateInput.value;
     const notes = notesTextarea.value;
+
+    // Validasi Form
+    if (cart.length === 0) {
+        alert('Keranjang Anda kosong. Silakan pilih barang yang ingin disewa.');
+        return;
+    }
+    if (!startDate || !endDate) {
+        alert('Silakan pilih tanggal mulai dan tanggal selesai sewa.');
+        startDateInput.focus();
+        return;
+    }
+    if (new Date(endDate) < new Date(startDate)) {
+        alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai.');
+        endDateInput.focus();
+        return;
+    }
 
     // Ganti dengan nomor WhatsApp admin Anda (format internasional tanpa '+')
     const targetPhoneNumber = "6281927149299"; 
+
+    // Kalkulasi ulang total untuk pesan WA
+    const duration = getDurationInDays();
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const totalCost = subtotal * duration;
 
     const message = `Halo *Puncak Gear*,
 
@@ -406,10 +467,13 @@ Saya ingin mengajukan sewa dengan detail berikut:
 *No. WhatsApp:* ${phone}
 *Tanggal Mulai:* ${formatDateForWA(startDate)}
 *Tanggal Selesai:* ${formatDateForWA(endDate)}
+*Lama Sewa:* ${duration} hari
 -----------------------------------
 
 *Barang yang disewa:*
 ${notes.replace('Saya ingin menyewa: ', '')}
+
+*Estimasi Total Biaya:* ${formatRupiah(totalCost)}
 
 Mohon konfirmasi ketersediaan dan total biayanya. Terima kasih!`;
     
@@ -424,11 +488,31 @@ Mohon konfirmasi ketersediaan dan total biayanya. Terima kasih!`;
     updateCartState();
 });
 
+// --- Validasi dan Inisialisasi Tanggal ---
+const setupDateInputs = () => {
+    const today = new Date().toISOString().split('T')[0];
+    startDateInput.setAttribute('min', today);
+
+    startDateInput.addEventListener('change', () => {
+        endDateInput.setAttribute('min', startDateInput.value);
+        // Jika tanggal akhir sudah terpilih dan lebih kecil, samakan dengan tanggal mulai
+        if (endDateInput.value && endDateInput.value < startDateInput.value) {
+            endDateInput.value = startDateInput.value;
+        }
+        updateCartModal(); // Hitung ulang total di keranjang
+    });
+
+    endDateInput.addEventListener('change', () => {
+        updateCartModal(); // Hitung ulang total di keranjang
+    });
+};
+
 // Global Event Listeners
 // Initial Render
 document.addEventListener('DOMContentLoaded', () => {
     checkHashForReadme(); // Panggil ini duluan agar popup tetap muncul meski ada error di bawahnya
     checkHashForLicense();
+    setupDateInputs();
     fetchProducts(); // Panggil fungsi fetch data saat website dimuat
     updateCartState();
     
