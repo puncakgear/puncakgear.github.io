@@ -231,7 +231,7 @@ const renderProducts = (data) => {
         card.style.animationDelay = `${index * 0.1}s`; // Efek muncul berurutan (stagger)
         
         card.innerHTML = `
-            <div class="card-number ${isDiscounted ? 'pulse-animation' : ''}" style="${isDiscounted ? 'background-color: var(--accent-orange);' : ''}">${product.id}</div>
+            <div class="card-number ${isDiscounted ? 'pulse-animation' : ''}">${product.id}</div>
             ${isDiscounted ? `<div class="discount-badge">Diskon ${discountPercentage}%</div>` : ''}
             <img src="${product.image}" alt="${product.name}" class="card-image" loading="lazy">
             <div class="card-body">

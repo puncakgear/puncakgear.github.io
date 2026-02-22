@@ -289,6 +289,22 @@ ul { list-style: none; }
 .card-number:hover {
     transform: scale(1.1);
 }
+
+@keyframes pulse-orange {
+    0% {
+        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0.7);
+    }
+    70% {
+        box-shadow: var(--shadow), 0 0 0 10px rgba(230, 126, 34, 0);
+    }
+    100% {
+        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0);
+    }
+}
+
+.pulse-animation {
+    animation: pulse-orange 2s infinite;
+}
 .discount-badge {
     position: absolute;
     top: 10px;
@@ -558,13 +574,35 @@ ul { list-style: none; }
 }
 
 /* --- Booking Section --- */
-.booking-section { background-color: var(--white); }
+.booking-section { 
+    background-color: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+
+.booking-section::before {
+    content: "";
+    position: absolute;
+    top: 80%;
+    left: -10rem;
+    transform: translateY(-50%);
+    width: 50%;
+    height: 90%;
+    background-image: url('/images/logo/background.webp');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.15;
+    pointer-events: none;
+}
 
 .booking-wrapper {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .booking-steps { margin-top: 1.5rem; padding-left: 1.2rem; list-style: disc; color: var(--text-light); }
