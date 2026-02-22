@@ -41,6 +41,66 @@ const formatRupiah = (number) => {
     }).format(number);
 };
 
+// --- Notifikasi Modern (Toast) ---
+function showToast(message, type = 'info', duration = 4000) {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    const icons = {
+        info: '&#8505;',
+        success: '&#10003;',
+        warning: '&#9888;',
+        error: '&#10005;'
+    };
+    
+    toast.innerHTML = `<span class="toast-icon">${icons[type] || ''}</span> <span>${message}</span>`;
+    container.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 100);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.addEventListener('transitionend', () => toast.remove());
+    }, duration);
+}
+
+// --- Validasi Form Inline ---
+function showInputError(inputElement, message) {
+    const formGroup = inputElement.parentElement;
+    if (!formGroup) return;
+
+    const oldError = formGroup.querySelector('.error-message');
+    if (oldError) oldError.remove();
+
+    inputElement.classList.add('input-error');
+    const errorEl = document.createElement('span');
+    errorEl.className = 'error-message';
+    errorEl.textContent = message;
+    formGroup.appendChild(errorEl);
+}
+
+function clearAllFormErrors() {
+    bookingForm.querySelectorAll('.error-message').forEach(el => el.remove());
+    bookingForm.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+}
+
+['name', 'phone', 'start-date', 'end-date'].forEach(id => {
+    const input = document.getElementById(id);
+    if (!input) return;
+    input.addEventListener('input', () => {
+        input.classList.remove('input-error');
+        const errorMsg = input.parentElement.querySelector('.error-message');
+        if (errorMsg) errorMsg.remove();
+    });
+});
+
 // --- Kalkulasi Durasi Sewa ---
 const getDurationInDays = () => {
     const startDate = startDateInput.value;
@@ -72,7 +132,7 @@ const addToCart = (productId) => {
 
     // Cek stok sebelum menambahkan
     if (product.stock <= 0) {
-        alert(`Maaf, ${product.name} sedang habis disewa.`);
+        showToast(`Maaf, ${product.name} sedang habis disewa.`, 'error');
         return;
     }
 
@@ -83,11 +143,12 @@ const addToCart = (productId) => {
         if (existingItem.quantity < product.stock) {
             existingItem.quantity++;
         } else {
-            alert(`Stok untuk ${product.name} hanya tersisa ${product.stock} unit.`);
+            showToast(`Stok maks. untuk ${product.name} (${product.stock} unit) tercapai.`, 'warning');
             return;
         }
     } else {
         cart.push({ ...product, quantity: 1 });
+        showToast(`${product.name} ditambahkan ke keranjang.`, 'success');
     }
     updateCartState();
 };
@@ -103,7 +164,7 @@ const changeQuantity = (productId, amount) => {
 
     // Cek stok saat menambah jumlah
     if (amount > 0 && newQuantity > product.stock) {
-        alert(`Stok untuk ${product.name} hanya tersisa ${product.stock} unit.`);
+        showToast(`Stok untuk ${product.name} hanya tersisa ${product.stock} unit.`, 'warning');
         return;
     }
 
@@ -450,6 +511,7 @@ const formatDateForWA = (dateString) => {
 // Event Listener untuk Booking Form
 bookingForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    clearAllFormErrors();
     
     const name = document.getElementById('name').value;
     const phone = document.getElementById('phone').value;
@@ -459,16 +521,18 @@ bookingForm.addEventListener('submit', (e) => {
 
     // Validasi Form
     if (cart.length === 0) {
-        alert('Keranjang Anda kosong. Silakan pilih barang yang ingin disewa.');
+        showToast('Keranjang Anda kosong. Silakan pilih barang.', 'error');
         return;
     }
     if (!startDate || !endDate) {
-        alert('Silakan pilih tanggal mulai dan tanggal selesai sewa.');
+        showInputError(startDateInput, 'Silakan pilih tanggal mulai dan tanggal selesai sewa.');
+        showToast('Harap lengkapi tanggal sewa.', 'error');
         startDateInput.focus();
         return;
     }
     if (new Date(endDate) < new Date(startDate)) {
-        alert('Tanggal selesai tidak boleh lebih awal dari tanggal mulai.');
+        showInputError(endDateInput, 'Tanggal selesai tidak boleh lebih awal dari tanggal mulai.');
+        showToast('Tanggal sewa tidak valid.', 'error');
         endDateInput.focus();
         return;
     }
@@ -517,17 +581,55 @@ const setupDateInputs = () => {
 
     startDateInput.addEventListener('change', () => {
         endDateInput.setAttribute('min', startDateInput.value);
-        // Jika tanggal akhir sudah terpilih dan lebih kecil, samakan dengan tanggal mulai
         if (endDateInput.value && endDateInput.value < startDateInput.value) {
             endDateInput.value = startDateInput.value;
         }
-        updateCartModal(); // Hitung ulang total di keranjang
+        updateCartModal();
     });
 
     endDateInput.addEventListener('change', () => {
-        updateCartModal(); // Hitung ulang total di keranjang
+        updateCartModal();
     });
 };
+
+// --- Global Keyboard Shortcuts ---
+document.addEventListener('keydown', (e) => {
+    // Shortcut 1: Tekan 'Escape' untuk menutup semua modal
+    if (e.key === 'Escape') {
+        // Close Cart Modal
+        if (cartModal.classList.contains('visible')) {
+            cartModal.classList.remove('visible');
+        }
+        // Close Product Detail Modal
+        if (productModal.classList.contains('visible')) {
+            productModal.classList.remove('visible');
+        }
+        // Close Terms Modal
+        if (termsModal && termsModal.classList.contains('visible')) {
+            termsModal.classList.remove('visible');
+        }
+        // Close README Modal (jika ada)
+        const readmeModal = document.getElementById('readme-modal');
+        if (readmeModal) {
+            readmeModal.remove();
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+        // Close LICENSE Modal (jika ada)
+        const licenseModal = document.getElementById('license-modal');
+        if (licenseModal) {
+            licenseModal.remove();
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+    }
+
+    // Shortcut 2: Tekan 'Ctrl+F' atau '/' untuk fokus ke pencarian
+    const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+    if ((e.ctrlKey && e.key.toLowerCase() === 'f') || (e.key === '/' && !isTyping)) {
+        e.preventDefault(); // Mencegah fungsi 'find' bawaan browser
+        searchInput.focus();
+        searchInput.select(); // Memilih semua teks agar mudah diganti
+    }
+});
 
 // Global Event Listeners
 // Initial Render
@@ -545,6 +647,55 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Google Sheet Fetch Logic ---
+const validateCartAvailability = () => {
+    if (cart.length === 0) return;
+
+    let cartChanged = false;
+    let messages = [];
+    const newCart = [];
+
+    cart.forEach(cartItem => {
+        const product = products.find(p => p.id === cartItem.id);
+
+        if (!product) {
+            // Kasus 1: Produk dihapus dari database
+            messages.push(`Produk "${cartItem.name}" tidak lagi tersedia.`);
+            cartChanged = true;
+        } else if (product.stock <= 0) {
+            // Kasus 2: Stok habis (disewa orang lain)
+            messages.push(`Stok "${cartItem.name}" habis.`);
+            cartChanged = true;
+        } else {
+            // Kasus 3: Stok berkurang (kurang dari yang ada di keranjang)
+            if (cartItem.quantity > product.stock) {
+                messages.push(`Stok "${cartItem.name}" hanya tersisa ${product.stock}. Jumlah disesuaikan.`);
+                cartItem.quantity = product.stock;
+                cartChanged = true;
+            }
+            
+            // Update harga jika ada perubahan di sheet
+            if (cartItem.price !== product.price) {
+                cartItem.price = product.price;
+                cartChanged = true;
+            }
+
+            newCart.push(cartItem);
+        }
+    });
+
+    if (cartChanged) {
+        cart = newCart;
+        updateCartState();
+        if (messages.length > 0) {
+            messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    showToast(msg, 'warning');
+                }, index * 300);
+            });
+        }
+    }
+};
+
 async function fetchProducts() {
     try {
         productGrid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">Memuat data produk...</p>';
@@ -553,6 +704,7 @@ async function fetchProducts() {
         const data = await response.text();
         
         products = parseCSV(data);
+        validateCartAvailability();
         renderProducts(products);
     } catch (error) {
         console.error('Error loading products:', error);
@@ -822,7 +974,7 @@ const checkHashForReadme = async () => {
                     });
                 } catch (e) {
                     console.error("Gagal memuat library markdown", e);
-                    alert("Gagal memuat library untuk menampilkan README.");
+                    showToast("Gagal memuat library untuk menampilkan README.", "error");
                     return;
                 }
             }
@@ -933,7 +1085,7 @@ const checkHashForLicense = async () => {
                     });
                 } catch (e) {
                     console.error("Gagal memuat library markdown", e);
-                    alert("Gagal memuat library untuk menampilkan LICENSE.");
+                    showToast("Gagal memuat library untuk menampilkan LICENSE.", "error");
                     return;
                 }
             }

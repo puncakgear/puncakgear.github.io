@@ -639,6 +639,61 @@ input, textarea {
 input:focus, textarea:focus { outline: 2px solid var(--primary-green); border-color: transparent; }
 .full-width { width: 100%; }
 
+/* --- Toast Notifications --- */
+#toast-container {
+    position: fixed;
+    top: 80px; /* Di bawah navbar */
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    padding: 15px 20px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    color: var(--white);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    min-width: 250px;
+    max-width: 350px;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast-icon {
+    font-size: 1.5rem;
+}
+
+.toast.toast-info { background-color: var(--primary-green); }
+.toast.toast-success { background-color: #2ecc71; /* Hijau */ }
+.toast.toast-warning { background-color: var(--accent-orange); }
+.toast.toast-error { background-color: #e74c3c; /* Merah */ }
+
+/* --- Form Validation --- */
+.form-group .error-message, .form-row .error-message {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+input.input-error,
+textarea.input-error { border-color: #e74c3c !important; }
+
+input.input-error:focus,
+textarea.input-error:focus { outline-color: #e74c3c !important; }
+
 /* --- Footer --- */
 footer { background-color: var(--dark-green); color: #d1d5db; padding: 4rem 0 2rem; }
 .footer-content {
