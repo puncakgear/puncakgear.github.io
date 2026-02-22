@@ -424,6 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchProducts(); // Panggil fungsi fetch data saat website dimuat
     updateCartState();
     document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    checkHashForReadme();
 });
 
 // --- Google Sheet Fetch Logic ---
@@ -684,3 +685,53 @@ function handleCartAction(e) {
             break;
     }
 }
+
+// --- Readme Popup Logic ---
+const checkHashForReadme = async () => {
+    if (window.location.hash === '#readme') {
+        let readmeModal = document.getElementById('readme-modal');
+        
+        if (!readmeModal) {
+            // Buat modal secara dinamis
+            readmeModal = document.createElement('div');
+            readmeModal.id = 'readme-modal';
+            readmeModal.className = 'cart-modal visible'; // Reuse style modal yang ada
+            readmeModal.style.zIndex = '9999';
+            
+            readmeModal.innerHTML = `
+                <div class="modal-content" style="width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column;">
+                    <div class="modal-header">
+                        <h2 style="margin:0;">README.md</h2>
+                        <button class="close-modal-btn" id="close-readme-btn">&times;</button>
+                    </div>
+                    <div class="modal-body" style="overflow-y: auto; padding: 1rem; background: #f9f9f9; border-radius: 4px;">
+                        <pre id="readme-text" style="white-space: pre-wrap; font-family: monospace; font-size: 0.85rem; color: #333;"></pre>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(readmeModal);
+
+            const closeBtn = readmeModal.querySelector('#close-readme-btn');
+            const removeModal = () => {
+                readmeModal.remove();
+                // Hapus hash agar bersih
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+            };
+            
+            closeBtn.addEventListener('click', removeModal);
+            readmeModal.addEventListener('click', (e) => {
+                if (e.target === readmeModal) removeModal();
+            });
+
+            try {
+                const res = await fetch('README.md');
+                const text = res.ok ? await res.text() : 'File README.md tidak ditemukan.';
+                document.getElementById('readme-text').textContent = text;
+            } catch (e) {
+                document.getElementById('readme-text').textContent = 'Gagal memuat README.md';
+            }
+        }
+    }
+};
+
+window.addEventListener('hashchange', checkHashForReadme);
