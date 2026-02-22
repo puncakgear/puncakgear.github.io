@@ -14,39 +14,6 @@ Aplikasi web ini memungkinkan pengguna untuk melihat dan menyewa perlengkapan ou
 *   **Syarat & Ketentuan:** Menampilkan syarat dan ketentuan penyewaan.
 *   **Responsif:** Tampilan yang optimal di berbagai perangkat.
 
-## Cara Penggunaan
-
-1.  **Konfigurasi Google Sheets**
-    *   Buka Google Sheets dan buat spreadsheet yang berisi data produk Anda.
-    *   Pastikan spreadsheet memiliki header berikut: `id`, `name`, `category`, `price`, `normalPrice`, `image`, `bahan`, `kapasitas`, `berat`, `available`.
-    *   Isi data produk sesuai dengan header tersebut.
-    *   Publikasikan spreadsheet ke web dengan format CSV:
-        *   Klik `File` > `Publish to the web`.
-        *   Pilih tab `Link`.
-        *   Pilih `Comma-separated values (.csv)` di dropdown.
-        *   Klik `Publish`.
-        *   Salin URL CSV yang dihasilkan.
-
-2.  **Konfigurasi Aplikasi Web**
-    *   Buka file `style.js`.
-    *   Ganti nilai `SHEET_URL` dengan URL CSV yang telah Anda salin dari Google Sheets.
-
-    ```javascript
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTqt3F8pzIuenmvVYXZjEPxMQjqdO9Eshsz6Is5gRtJ17W7MY0vZcJlTzCrC_-t3uSFp908xchdOQJg/pub?gid=0&single=true&output=csv';
-    ```
-
-3.  **Konfigurasi Nomor WhatsApp Admin**
-    *   Buka file `style.js`.
-    *   Ganti nilai `targetPhoneNumber` dengan nomor WhatsApp admin Anda (format internasional tanpa '+').
-
-    ```javascript
-    const targetPhoneNumber = "6281927149299";
-    ```
-
-4.  **Membuka Aplikasi Web**
-    *   Pastikan semua file HTML, CSS, dan JavaScript berada dalam satu folder.
-    *   Buka file `index.html` di browser Anda.
-
 ## Struktur Data Google Sheets
 
 Berikut adalah contoh struktur data yang diharapkan di Google Sheets:
