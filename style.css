@@ -293,18 +293,23 @@ ul { list-style: none; }
 @keyframes pulse-orange {
 	0% {
 		box-shadow: var(--shadow), 
-					0 0 0 0px rgba(230, 126, 34, 0.7), /* Oranye mulai */
-					0 0 0 5px rgba(239, 68, 68, 0.35); /* Merah di tengah siklusnya */
+					0 0 0 0 rgba(230, 126, 34, 0.7),    /* Oranye Baru Mulai */
+					0 0 0 10px rgba(239, 68, 68, 0.35); /* Merah Sudah Setengah Jalan */
 	}
 	50% {
 		box-shadow: var(--shadow), 
-					0 0 0 5px rgba(230, 126, 34, 0.35), /* Oranye di tengah siklusnya */
-					0 0 0 0px rgba(239, 68, 68, 0.7); /* Merah mulai siklus baru */
+					0 0 0 10px rgba(230, 126, 34, 0.35), /* Oranye Setengah Jalan */
+					0 0 0 20px rgba(239, 68, 68, 0);     /* Merah Selesai (Hilang) */
+	}
+	50.1% {
+		box-shadow: var(--shadow), 
+					0 0 0 10px rgba(230, 126, 34, 0.35), /* Oranye Masih Setengah Jalan */
+					0 0 0 0 rgba(239, 68, 68, 0.7);      /* Merah Mulai Lagi (Reset) */
 	}
 	100% {
 		box-shadow: var(--shadow), 
-					0 0 0 10px rgba(230, 126, 34, 0), /* Oranye selesai */
-					0 0 0 5px rgba(239, 68, 68, 0.35); /* Merah di tengah siklusnya lagi */
+					0 0 0 20px rgba(230, 126, 34, 0),    /* Oranye Selesai (Hilang) */
+					0 0 0 10px rgba(239, 68, 68, 0.35);  /* Merah Setengah Jalan (Loop ke 0%) */
 	}
 }
 
