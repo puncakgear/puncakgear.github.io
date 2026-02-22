@@ -39,7 +39,7 @@ Berikut adalah contoh struktur data yang diharapkan di Google Sheets:
 
 ## Lisensi
 
-Aplikasi web ini dilisensikan di bawah [Lisensi MIT](#lisensi).
+Aplikasi web ini dilisensikan di bawah [Lisensi MIT](#license).
 
 ## Kontribusi
 
