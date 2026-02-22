@@ -37,20 +37,6 @@ Berikut adalah contoh struktur data yang diharapkan di Google Sheets:
 *   **berat:** Berat produk (teks).
 *   **available:** Status ketersediaan produk (true/false).
 
-## Kustomisasi
-
-Anda dapat menyesuaikan tampilan dan fungsionalitas aplikasi web ini dengan mengubah file HTML, CSS, dan JavaScript.
-
-*   **HTML:** Struktur halaman web (file `index.html`).
-*   **CSS:** Tampilan halaman web (file `style.css`).
-*   **JavaScript:** Logika aplikasi web (file `style.js`).
-
-## Catatan
-
-*   Pastikan URL CSV Google Sheets dapat diakses publik.
-*   Aplikasi web ini menggunakan Local Storage untuk menyimpan data keranjang belanja.
-*   Pastikan browser Anda mendukung JavaScript.
-
 ## Lisensi
 
 Aplikasi web ini dilisensikan di bawah [Lisensi MIT](LICENSE).
