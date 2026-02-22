@@ -291,15 +291,21 @@ ul { list-style: none; }
 }
 
 @keyframes pulse-orange {
-    0% {
-        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0.7); /* Start with Orange */
-    }
-    75% {
-        box-shadow: var(--shadow), 0 0 0 10px rgba(239, 68, 68, 0); /* Expand & transform to transparent Red */
-    }
-    100% {
-        box-shadow: var(--shadow), 0 0 0 0 rgba(230, 126, 34, 0); /* Fade out */
-    }
+	0% {
+		box-shadow: var(--shadow), 
+					0 0 0 0px rgba(230, 126, 34, 0.7), /* Oranye mulai */
+					0 0 0 5px rgba(239, 68, 68, 0.35); /* Merah di tengah siklusnya */
+	}
+	50% {
+		box-shadow: var(--shadow), 
+					0 0 0 5px rgba(230, 126, 34, 0.35), /* Oranye di tengah siklusnya */
+					0 0 0 0px rgba(239, 68, 68, 0.7); /* Merah mulai siklus baru */
+	}
+	100% {
+		box-shadow: var(--shadow), 
+					0 0 0 10px rgba(230, 126, 34, 0), /* Oranye selesai */
+					0 0 0 5px rgba(239, 68, 68, 0.35); /* Merah di tengah siklusnya lagi */
+	}
 }
 
 .pulse-animation {
