@@ -696,20 +696,60 @@ const checkHashForReadme = async () => {
         let readmeModal = document.getElementById('readme-modal');
         
         if (!readmeModal) {
+            // 1. Load Library Markdown Parser (Marked.js) secara dinamis jika belum ada
+            if (typeof marked === 'undefined') {
+                try {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+                        script.onload = resolve;
+                        script.onerror = reject;
+                        document.head.appendChild(script);
+                    });
+                } catch (e) {
+                    console.error("Gagal memuat library markdown", e);
+                    alert("Gagal memuat library untuk menampilkan README.");
+                    return;
+                }
+            }
+
             // Buat modal secara dinamis
             readmeModal = document.createElement('div');
             readmeModal.id = 'readme-modal';
             readmeModal.className = 'cart-modal visible'; // Reuse style modal yang ada
             readmeModal.style.zIndex = '9999';
             
+            // Tambahkan CSS khusus untuk konten Markdown agar rapi (GitHub Style)
+            const markdownStyles = `
+                <style>
+                    .markdown-body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; line-height: 1.6; color: #24292e; }
+                    .markdown-body h1, .markdown-body h2, .markdown-body h3 { border-bottom: 1px solid #eaecef; padding-bottom: .3em; margin-top: 24px; margin-bottom: 16px; font-weight: 600; line-height: 1.25; }
+                    .markdown-body h1 { font-size: 2em; }
+                    .markdown-body h2 { font-size: 1.5em; }
+                    .markdown-body p { margin-top: 0; margin-bottom: 16px; }
+                    .markdown-body ul, .markdown-body ol { padding-left: 2em; margin-bottom: 16px; list-style: disc; }
+                    .markdown-body table { border-spacing: 0; border-collapse: collapse; display: block; width: 100%; overflow: auto; margin-bottom: 16px; }
+                    .markdown-body table th, .markdown-body table td { padding: 6px 13px; border: 1px solid #dfe2e5; }
+                    .markdown-body table tr { background-color: #fff; border-top: 1px solid #c6cbd1; }
+                    .markdown-body table tr:nth-child(2n) { background-color: #f6f8fa; }
+                    .markdown-body code { padding: .2em .4em; margin: 0; font-size: 85%; background-color: rgba(27,31,35,.05); border-radius: 3px; font-family: monospace; }
+                    .markdown-body pre { padding: 16px; overflow: auto; font-size: 85%; line-height: 1.45; background-color: #f6f8fa; border-radius: 3px; margin-bottom: 16px; }
+                    .markdown-body pre code { background-color: transparent; padding: 0; }
+                    .markdown-body blockquote { padding: 0 1em; color: #6a737d; border-left: 0.25em solid #dfe2e5; margin: 0 0 16px 0; }
+                    .markdown-body a { color: #0366d6; text-decoration: none; }
+                    .markdown-body a:hover { text-decoration: underline; }
+                </style>
+            `;
+
             readmeModal.innerHTML = `
-                <div class="modal-content" style="width: 90%; max-width: 800px; max-height: 90vh; display: flex; flex-direction: column;">
+                ${markdownStyles}
+                <div class="modal-content" style="width: 90%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;">
                     <div class="modal-header">
-                        <h2 style="margin:0;">README.md</h2>
+                        <h2 style="margin:0;">Dokumentasi (README)</h2>
                         <button class="close-modal-btn" id="close-readme-btn">&times;</button>
                     </div>
-                    <div class="modal-body" style="overflow-y: auto; padding: 1rem; background: #f9f9f9; border-radius: 4px;">
-                        <pre id="readme-text" style="white-space: pre-wrap; font-family: monospace; font-size: 0.85rem; color: #333;"></pre>
+                    <div class="modal-body" style="overflow-y: auto; padding: 2rem; background: #fff; border-radius: 4px;">
+                        <div id="readme-content" class="markdown-body">Memuat...</div>
                     </div>
                 </div>
             `;
@@ -729,10 +769,15 @@ const checkHashForReadme = async () => {
 
             try {
                 const res = await fetch('README.md');
-                const text = res.ok ? await res.text() : 'File README.md tidak ditemukan.';
-                document.getElementById('readme-text').textContent = text;
+                if (res.ok) {
+                    const text = await res.text();
+                    // Parse Markdown ke HTML menggunakan marked
+                    document.getElementById('readme-content').innerHTML = marked.parse(text);
+                } else {
+                    document.getElementById('readme-content').innerHTML = '<p style="color:red">File README.md tidak ditemukan.</p>';
+                }
             } catch (e) {
-                document.getElementById('readme-text').textContent = 'Gagal memuat README.md';
+                document.getElementById('readme-content').innerHTML = '<p style="color:red">Gagal memuat README.md</p>';
             }
         }
     }
