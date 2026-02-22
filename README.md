@@ -30,7 +30,7 @@ Berikut adalah contoh struktur data yang diharapkan di Google Sheets:
 *   **name:** Nama produk (teks).
 *   **category:** Kategori produk (tas, tenda, masak, sepatu, pakaian).
 *   **normalPrice:** Harga normal sebelum diskon (angka).
-*   **price:** Harga sewa per hari setelah diskon(angka).
+*   **price:** Harga sewa per hari setelah diskon (angka, opsional).
 *   **image:** URL gambar produk (teks).
 *   **bahan:** Bahan produk (teks).
 *   **kapasitas:** Kapasitas produk (teks).
