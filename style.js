@@ -738,17 +738,33 @@ const checkHashForReadme = async () => {
                     .markdown-body blockquote { padding: 0 1em; color: #6a737d; border-left: 0.25em solid #dfe2e5; margin: 0 0 16px 0; }
                     .markdown-body a { color: #0366d6; text-decoration: none; }
                     .markdown-body a:hover { text-decoration: underline; }
+                    
+                    /* Mobile Responsive Adjustments */
+                    @media (max-width: 768px) {
+                        .readme-modal-content {
+                            width: 95% !important;
+                            padding: 1rem !important;
+                            max-height: 95vh !important;
+                        }
+                        .readme-modal-body {
+                            padding: 0.5rem !important;
+                        }
+                        .markdown-body { font-size: 14px; }
+                        .markdown-body h1 { font-size: 1.5em; }
+                        .markdown-body h2 { font-size: 1.25em; }
+                        .markdown-body pre { padding: 10px; }
+                    }
                 </style>
             `;
 
             readmeModal.innerHTML = `
                 ${markdownStyles}
-                <div class="modal-content" style="width: 90%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;">
+                <div class="modal-content readme-modal-content" style="width: 90%; max-width: 900px; max-height: 90vh; display: flex; flex-direction: column;">
                     <div class="modal-header">
                         <h2 style="margin:0;">Dokumentasi (README)</h2>
                         <button class="close-modal-btn" id="close-readme-btn">&times;</button>
                     </div>
-                    <div class="modal-body" style="overflow-y: auto; padding: 2rem; background: #fff; border-radius: 4px;">
+                    <div class="modal-body readme-modal-body" style="overflow-y: auto; padding: 2rem; background: #fff; border-radius: 4px;">
                         <div id="readme-content" class="markdown-body">Memuat...</div>
                     </div>
                 </div>
