@@ -266,6 +266,29 @@ ul { list-style: none; }
     padding-bottom: 0.25rem;
 }
 
+.card-number {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-green);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 0px 50% 50% 50%;
+    border: 2px solid var(--white);
+    box-shadow: var(--shadow);
+    z-index: 5;
+    transition: transform 0.3s ease;
+}
+
+.card-number:hover {
+    transform: scale(1.1);
+}
 .discount-badge {
     position: absolute;
     top: 10px;
