@@ -18,19 +18,19 @@ Aplikasi web ini memungkinkan pengguna untuk melihat dan menyewa perlengkapan ou
 
 Berikut adalah contoh struktur data yang diharapkan di Google Sheets:
 
-| id  | name                 | category | price | normalPrice | image                                                                 | bahan | kapasitas | berat | available |
-| --- | -------------------- | -------- | ----- | ----------- | --------------------------------------------------------------------- | ----- | --------- | ----- | --------- |
-| 1   | Tas Carrier Consina  | tas      | 50000 | 60000       | images/tas-consina.jpg                                                | Cordura | 50L       | 1.5kg | true      |
-| 2   | Tenda Dome Greatout | tenda    | 75000 | 80000       | images/tenda-greatout.jpg                                             | Nylon   | 4 orang    | 2.5kg | true      |
-| 3   | Kompor Camping       | masak    | 25000 | 30000       | images/kompor-camping.jpg                                             | Besi    | -         | 0.5kg | true      |
-| 4   | Sepatu Hiking        | sepatu   | 100000| 120000      | images/sepatu-hiking.jpg                                              | Kulit  | 42        | 0.8kg | false     |
-| ... | ...                  | ...      | ...   | ...         | ...                                                                     | ...   | ...       | ...   | ...       |
+| id  | name                 | category | normalPrice | price | image                                                                 | bahan | kapasitas | berat | available |
+| --- | -------------------- | -------- | ----------- | ----- | --------------------------------------------------------------------- | ----- | --------- | ----- | --------- |
+| 1   | Tas Carrier Consina  | tas      | 60000       | 50000 | images/tas-consina.jpg                                                | Cordura | 50L       | 1.5kg | true      |
+| 2   | Tenda Dome Greatout | tenda    | 80000       | 75000 | images/tenda-greatout.jpg                                             | Nylon   | 4 orang    | 2.5kg | true      |
+| 3   | Kompor Camping       | masak    | 30000       | 25000 | images/kompor-camping.jpg                                             | Besi    | -         | 0.5kg | true      |
+| 4   | Sepatu Hiking        | sepatu   | 120000      | 100000| images/sepatu-hiking.jpg                                              | Kulit  | 42        | 0.8kg | false     |
+| ... | ...                  | ...      | ...         | ...   | ...                                                                     | ...   | ...       | ...   | ...       |
 
 *   **id:** ID unik produk (angka).
 *   **name:** Nama produk (teks).
 *   **category:** Kategori produk (tas, tenda, masak, sepatu, pakaian).
-*   **price:** Harga sewa per hari (angka).
 *   **normalPrice:** Harga normal sebelum diskon (angka).
+*   **price:** Harga sewa per hari setelah diskon(angka).
 *   **image:** URL gambar produk (teks).
 *   **bahan:** Bahan produk (teks).
 *   **kapasitas:** Kapasitas produk (teks).
